@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include "MOAIGCTurnBasedMatch.h"
+#include "MOAIGCTurnBasedParticipant.h"
 
 //================================================================//
 // lua
@@ -37,6 +38,14 @@ int MOAIGCTurnBasedMatch::_getMatchData ( lua_State* L ) {
 		lua_pushstring ( state, [string UTF8String] );
 	}
 	return 1;
+}
+
+int MOAIGCTurnBasedMatch::_getCurrentParticipant ( lua_State* L ) {
+    MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" );
+    MOAIGCTurnBasedParticipant* participant = new MOAIGCTurnBasedParticipant();
+    participant->setParticipant ( [self->match currentParticipant] );
+    participant->PushLuaUserdata ( state );
+    return 1;
 }
 
 void MOAIGCTurnBasedMatch::setMatch ( GKTurnBasedMatch* newMatch ) {
@@ -127,6 +136,7 @@ void MOAIGCTurnBasedMatch::RegisterLuaFuncs ( MOAILuaState& state ) {
     
 	// call any initializers for base classes here:
 	// MOAIFooBase::RegisterLuaFuncs ( state );
+    printf ( "has current participant method\n" );
     
 	// here are the instance methods:
 	luaL_Reg regTable [] = {
@@ -134,6 +144,7 @@ void MOAIGCTurnBasedMatch::RegisterLuaFuncs ( MOAILuaState& state ) {
         { "getStatus", _getStatus },
 		{ "getMatchID", _getMatchID },
 		{ "getMatchData", _getMatchData },
+        { "getCurrentParticipant", _getCurrentParticipant },
 		{ NULL, NULL }
 	};
     

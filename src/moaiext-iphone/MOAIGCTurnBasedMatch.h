@@ -28,6 +28,7 @@ private:
     static int _getStatus ( lua_State* L );
     static int _getMatchID ( lua_State* L );
     static int _getMatchData ( lua_State* L );
+	static int _getCurrentParticipant ( lua_State* L );
 	
 public:
 	

@@ -110,7 +110,8 @@ void MOAIGCTurnBasedParticipant::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	// call any initializers for base classes here:
 	// MOAIFooBase::RegisterLuaFuncs ( state );
-
+    printf ( "registering participant...\n" );
+    
 	// here are the instance methods:
 	luaL_Reg regTable [] = {
 		{ "getLastTurnDate", _getLastTurnDate },
