@@ -14,8 +14,6 @@
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
-//#define DISABLE_TAPJOY
-
 enum ConnectionType {
 	CONNECTION_TYPE_NONE,
 	CONNECTION_TYPE_WIFI,

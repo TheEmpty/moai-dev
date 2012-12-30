@@ -9,11 +9,60 @@
 // lua
 //================================================================//
 
-int MOAIGCTurnBasedMatch::_createTable ( lua_State* L ) {
-    MOAILuaState state ( L );
-    MOAIGCTurnBasedMatch* foo = new MOAIGCTurnBasedMatch ();
-    foo->PushLuaUserdata ( state );
-    return 1;
+int MOAIGCTurnBasedMatch::_nextTurn ( lua_State *L ) {
+    MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" );
+    // match:nextTurn ( players, match.TURN_TIMEOUT_DEFAULT, matchData, passedTurn )
+    // match:nextTurn ( { MOAIGCTurnBasedParticipant(s) }, (int) flag or days to timeout, string (seralized table), callback  ) 
+    
+    // check args
+    int n = lua_gettop(state);
+	if ( n != 4 && n != 5 ) {
+		luaL_error(state, "Got %d arguments expected 4 or 5 (self, players, timeOut, matchData [, callback])\n", n);
+		return 0;
+	}
+    
+    // create an array (NSArray) of the real participant objects
+    assert(L && lua_type(state, 2) == LUA_TTABLE ); // assert it's a table
+    int length = luaL_getn(state, 2);  // get size of table
+    GKTurnBasedParticipant* participants[length]; // build array of length
+    
+    for (int i=1; i <= length; i++) { // loop over table inserting into array
+        lua_rawgeti(state, 2, i);  // push t[i]
+        MOAIGCTurnBasedParticipant* object = state.GetLuaObject <MOAIGCTurnBasedParticipant> (-1, true);
+        participants[i - 1] = object->getParticipant();
+        lua_pop(state, 1);
+    }
+    
+    NSArray* array = [NSArray arrayWithObjects: participants count:length]; // build nsarray from array
+    // delete participants; // free array
+    
+    // create / load the timeOut (NSTimeInterval)
+    int daysOrFlag = lua_tonumber ( state, 3 );
+    NSTimeInterval timeOut;
+    
+    if ( daysOrFlag == TURN_TIMEOUT_DEFAULT ) {
+        timeOut = GKTurnTimeoutDefault;
+    } else if ( daysOrFlag == TURN_TIMEOUT_NONE ) {
+        timeOut = GKTurnTimeoutNone;
+    } else {
+        timeOut = 60 * 60 * 24 * daysOrFlag;
+    }
+    
+    // convert matchData to NSData
+    NSString* matchDataString = [NSString stringWithUTF8String: lua_tostring ( state, 4 )];
+    NSData* matchData = [matchDataString dataUsingEncoding: NSUTF8StringEncoding];
+    [matchDataString release];
+    
+	// (void)endTurnWithNextParticipants:(NSArray *)nextParticipants turnTimeout:(NSTimeInterval)timeout matchData:(NSData *)matchData completionHandler:(void (^)(NSError *error))completionHandler
+    [self->match endTurnWithNextParticipants: array turnTimeout: timeOut matchData: matchData completionHandler: ^( NSError* error ) {
+        printf ( "completion handler...\n" );
+    }];
+
+    // endTurnWithNextParticipants: turnTimeout: matchData: completionHandler:
+    // [array release];
+    // [matchData release];
+    
+    return 0;
 }
 
 int MOAIGCTurnBasedMatch::_getStatus ( lua_State* L ) {
@@ -40,6 +89,26 @@ int MOAIGCTurnBasedMatch::_getMatchData ( lua_State* L ) {
 	return 1;
 }
 
+int MOAIGCTurnBasedMatch::_getParticipants ( lua_State *L ) {
+	MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" );
+	
+	lua_newtable ( state );
+	
+	int stop = [[self->match participants] count];
+	
+    for (int i = 0; stop > i; i++ ) {
+        lua_pushinteger ( state, i + 1 );
+		
+        MOAIGCTurnBasedParticipant* participant = new MOAIGCTurnBasedParticipant ();
+		participant->setParticipant ( [self->match participants][ i ] );
+		participant->PushLuaUserdata ( state );
+		
+        lua_settable ( state, -3 );
+    }
+	
+	return 1;
+}
+
 int MOAIGCTurnBasedMatch::_getCurrentParticipant ( lua_State* L ) {
     MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" );
     MOAIGCTurnBasedParticipant* participant = new MOAIGCTurnBasedParticipant();
@@ -51,34 +120,6 @@ int MOAIGCTurnBasedMatch::_getCurrentParticipant ( lua_State* L ) {
 void MOAIGCTurnBasedMatch::setMatch ( GKTurnBasedMatch* newMatch ) {
     [newMatch retain];
     this->match = newMatch;
-}
-
-//----------------------------------------------------------------//
-/**	@name	classHello
- @text	Class (a.k.a. static) method. Prints the string 'MOAIFoo class foo!' to the console.
- 
- @out	nil
- */
-int MOAIGCTurnBasedMatch::_classHello ( lua_State* L ) {
-	UNUSED ( L );
-	
-	printf ( "MOAIGCTurnBasedMatch class foo!\n" );
-	
-	return 0;
-}
-
-//----------------------------------------------------------------//
-/**	@name	instanceHello
- @text	Prints the string 'MOAIFoo instance foo!' to the console.
- 
- @out	nil
- */
-int MOAIGCTurnBasedMatch::_instanceHello ( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" ) // this macro initializes the 'self' variable and type checks arguments
-	
-	printf ( "MOAIGCTurnBasedMatch instance foo!\n" );
-	
-	return 0;
 }
 
 //================================================================//
@@ -123,8 +164,6 @@ void MOAIGCTurnBasedMatch::RegisterLuaClass ( MOAILuaState& state ) {
     
 	// here are the class methods:
 	luaL_Reg regTable [] = {
-		{ "classHello",		_classHello },
-        { "createTable",    _createTable },
 		{ NULL, NULL }
 	};
     
@@ -136,15 +175,15 @@ void MOAIGCTurnBasedMatch::RegisterLuaFuncs ( MOAILuaState& state ) {
     
 	// call any initializers for base classes here:
 	// MOAIFooBase::RegisterLuaFuncs ( state );
-    printf ( "has current participant method\n" );
     
 	// here are the instance methods:
 	luaL_Reg regTable [] = {
-		{ "instanceHello",	_instanceHello },
         { "getStatus", _getStatus },
 		{ "getMatchID", _getMatchID },
 		{ "getMatchData", _getMatchData },
         { "getCurrentParticipant", _getCurrentParticipant },
+        { "getParticipants", _getParticipants },
+        { "nextTurn", _nextTurn },
 		{ NULL, NULL }
 	};
     

@@ -94,7 +94,12 @@ void MOAIGCTurnBasedParticipant::RegisterLuaClass ( MOAILuaState& state ) {
 	// MOAIFooBase::RegisterLuaClass ( state );
 
 	// also register constants:
-	// state.SetField ( -1, "FOO_CONST", ( u32 )FOO_CONST );
+    state.SetField ( -1, "STATUS_UNKNOWN", GKTurnBasedParticipantStatusUnknown );
+    state.SetField ( -1, "STATUS_INVITED", GKTurnBasedParticipantStatusInvited );
+    state.SetField ( -1, "STATUS_DECLINED", GKTurnBasedParticipantStatusDeclined );
+    state.SetField ( -1, "STATUS_MATCHING", GKTurnBasedParticipantStatusMatching );
+    state.SetField ( -1, "STATUS_ACTIVE", GKTurnBasedParticipantStatusActive );
+    state.SetField ( -1, "STATUS_DONE", GKTurnBasedParticipantStatusDone );
 
 	// here are the class methods:
 	luaL_Reg regTable [] = {
@@ -110,7 +115,6 @@ void MOAIGCTurnBasedParticipant::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	// call any initializers for base classes here:
 	// MOAIFooBase::RegisterLuaFuncs ( state );
-    printf ( "registering participant...\n" );
     
 	// here are the instance methods:
 	luaL_Reg regTable [] = {

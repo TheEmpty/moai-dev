@@ -17,18 +17,17 @@
 class MOAIGCTurnBasedMatch : public virtual MOAILuaObject {
 private:
 	static const char TURN_TIMEOUT_DEFAULT = 0;
-	static const char TURN_TIMEOUT_NONE = 1;
+	static const char TURN_TIMEOUT_NONE = -1;
     
 	GKTurnBasedMatch* match;
     
 	//----------------------------------------------------------------//
-	static int _classHello	( lua_State* L );
-	static int _createTable ( lua_State* L );
-	static int _instanceHello ( lua_State* L );
     static int _getStatus ( lua_State* L );
     static int _getMatchID ( lua_State* L );
     static int _getMatchData ( lua_State* L );
 	static int _getCurrentParticipant ( lua_State* L );
+    static int _getParticipants ( lua_State* L );
+	static int _nextTurn ( lua_State* L );
 	
 public:
 	

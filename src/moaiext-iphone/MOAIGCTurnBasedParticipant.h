@@ -36,6 +36,7 @@ public:
 	MOAIGCTurnBasedParticipant ();
 	~MOAIGCTurnBasedParticipant ();
 	void setParticipant ( GKTurnBasedParticipant* newParticipant );
+	GKTurnBasedParticipant* getParticipant () { return participant; };
 	void RegisterLuaClass ( MOAILuaState& state );
 	void RegisterLuaFuncs ( MOAILuaState& state );
 };
