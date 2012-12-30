@@ -30,6 +30,7 @@ private:
 
 	//----------------------------------------------------------------//
 	static int	_authenticatePlayer			( lua_State* L );
+	static int	_setAuthenticatePlayerCallback ( lua_State* L );
 	static int	_getPlayerAlias				( lua_State* L );
 	static int	_getScores					( lua_State* L );
 	static int	_isSupported				( lua_State* L );
@@ -55,6 +56,7 @@ public:
 	};
 	
 	MOAILuaRef								mGetScoresCallback;
+	MOAILuaRef								mAuthenticatePlayerCallback;
 	BOOL									mIsGameCenterSupported;
 	MOAIGameCenterIOSLeaderboardDelegate*	mLeaderboardDelegate;
 	MOAIGameCenterIOSAchievementDelegate*	mAchievementDelegate;

@@ -8,6 +8,7 @@
 #import <moaiext-iphone/MOAIDialogIOS.h>
 #import <moaiext-iphone/MOAIFacebookIOS.h>
 #import <moaiext-iphone/MOAIGameCenterIOS.h>
+#import <moaiext-iphone/MOAIGCTurnBasedIOS.h>
 #import <moaiext-iphone/MOAIKeyboardIOS.h>
 #import <moaiext-iphone/MOAIMoviePlayerIOS.h>
 #import <moaiext-iphone/MOAINotificationsIOS.h>

@@ -10,6 +10,15 @@
 // lua
 //================================================================//
 
+int MOAIGameCenterIOS::_setAuthenticatePlayerCallback ( lua_State* L ) {
+	
+	MOAILuaState state ( L );
+    
+	MOAIGameCenterIOS::Get ().mAuthenticatePlayerCallback.SetStrongRef ( state, 1 );
+    
+	return 0;
+}
+
 //----------------------------------------------------------------//
 /**	@name	authenticatePlayer
 	@text	Makes sure GameCenter is supported and an account is 
@@ -23,7 +32,6 @@
 int MOAIGameCenterIOS::_authenticatePlayer ( lua_State* L ) {
 	
 	MOAILuaState state ( L );
-	
 	// Check for presence of GKLocalPlayer class.
     BOOL localPlayerClassAvailable = ( NSClassFromString ( @"GKLocalPlayer" )) != nil;
 	
@@ -38,23 +46,28 @@ int MOAIGameCenterIOS::_authenticatePlayer ( lua_State* L ) {
 		[ localPlayer authenticateWithCompletionHandler: ^( NSError *error ) {
 			
 			if ( [ error code ] == GKErrorNotSupported || [ error  code ] == GKErrorGameUnrecognized ) {
-				
+				printf ( "Error in authenticating local player: %d\n", [ error code ]);
 				MOAIGameCenterIOS::Get ().mIsGameCenterSupported = FALSE;
 			}
 			else if ([ GKLocalPlayer localPlayer ].isAuthenticated) {
 				
 				MOAIGameCenterIOS::Get ().mLocalPlayer = localPlayer;
 				MOAIGameCenterIOS::Get ().mIsGameCenterSupported = TRUE;	
-				MOAIGameCenterIOS::Get ().GetAchievements ();						
+				MOAIGameCenterIOS::Get ().GetAchievements ();
 			}
-		 }];
-	}	
+		 
+            if ( MOAIGameCenterIOS::Get ().mAuthenticatePlayerCallback ) {
+                MOAILuaStateHandle funcState = MOAIGameCenterIOS::Get ().mAuthenticatePlayerCallback.GetSelf ();
+                funcState.DebugCall(0, 0);
+            }
+        }];
+	}
 	
 	return 0;
 }
 
 //----------------------------------------------------------------//
-/**	@name	getPlayerAlias
+/**	@name	`Alias
 	@text	Returns the user visible player name string from GameCenter.
 
 	@in 	nil
@@ -301,6 +314,7 @@ void MOAIGameCenterIOS::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	luaL_Reg regTable [] = {
 		{ "authenticatePlayer",			_authenticatePlayer },
+		{ "setAuthenticatePlayerCallback",	_setAuthenticatePlayerCallback },
 		{ "getPlayerAlias",					_getPlayerAlias },
 		{ "getScores",					_getScores },
 		{ "isSupported",				_isSupported },
