@@ -8,7 +8,7 @@
 
 #include "pch.h"
 #include "MOAIGCTurnBasedIOS.h"
-// #include "MOAIGCTurnBasedMatch.h"
+#include "MOAIGCTurnBasedMatch.h"
 #import <moaiext-iphone/NSDate+MOAILib.h>
 
 MOAIGCTurnBasedIOS::MOAIGCTurnBasedIOS () {
@@ -171,9 +171,9 @@ void pushMatchData ( MOAILuaStateHandle* state, GKTurnBasedMatch* match ) {
             //*luaMatch = new MOAIGCTurnBasedMatch ( match );
             //lua_getglobal ( state, "MOAIGCTurnBasedMatch" );
             //lua_setmetatable ( state, -2 );
-            // MOAIGCTurnBasedMatch* luaMatch = new MOAIGCTurnBasedMatch;
-			// luaMatch->setMatch( match );
-            // luaMatch->PushLuaUserdata( state );
+			MOAIGCTurnBasedMatch* luaMatch = new MOAIGCTurnBasedMatch;
+			luaMatch->setMatch( match );
+            luaMatch->PushLuaUserdata( state );
             
             // pushMatchData ( &state, match );
 			state.DebugCall ( 1, 0 );
