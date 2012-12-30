@@ -65,7 +65,7 @@ int MOAIGCTurnBasedMatch::_classHello ( lua_State* L ) {
  @out	nil
  */
 int MOAIGCTurnBasedMatch::_instanceHello ( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAIFoo, "U" ) // this macro initializes the 'self' variable and type checks arguments
+	MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" ) // this macro initializes the 'self' variable and type checks arguments
 	
 	printf ( "MOAIGCTurnBasedMatch instance foo!\n" );
 	

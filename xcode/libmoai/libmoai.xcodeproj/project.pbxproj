@@ -1449,6 +1449,8 @@
 		11988D69168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 11988D67168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.mm */; };
 		11988D6C168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 11988D6A168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.h */; };
 		11988D6D168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 11988D6B168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.mm */; };
+		11988D701690082C006FDB75 /* MOAIGCTurnBasedParticipant.mm in Sources */ = {isa = PBXBuildFile; fileRef = 11988D6E1690082C006FDB75 /* MOAIGCTurnBasedParticipant.mm */; };
+		11988D711690082C006FDB75 /* MOAIGCTurnBasedParticipant.h in Headers */ = {isa = PBXBuildFile; fileRef = 11988D6F1690082C006FDB75 /* MOAIGCTurnBasedParticipant.h */; };
 		660EBB04160D184A000B1203 /* Crittercism.h in Headers */ = {isa = PBXBuildFile; fileRef = 660EBB03160D184A000B1203 /* Crittercism.h */; };
 		660EBB05160D184A000B1203 /* Crittercism.h in Headers */ = {isa = PBXBuildFile; fileRef = 660EBB03160D184A000B1203 /* Crittercism.h */; };
 		660EBB22160D1859000B1203 /* CrashReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 660EBB06160D1859000B1203 /* CrashReporter.h */; };
@@ -4362,6 +4364,8 @@
 		11988D67168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MOAIGCTurnBasedIOS.mm; path = "moaiext-iphone/MOAIGCTurnBasedIOS.mm"; sourceTree = "<group>"; };
 		11988D6A168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOAIGCTurnBasedMatch.h; path = "moaiext-iphone/MOAIGCTurnBasedMatch.h"; sourceTree = "<group>"; };
 		11988D6B168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MOAIGCTurnBasedMatch.mm; path = "moaiext-iphone/MOAIGCTurnBasedMatch.mm"; sourceTree = "<group>"; };
+		11988D6E1690082C006FDB75 /* MOAIGCTurnBasedParticipant.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MOAIGCTurnBasedParticipant.mm; path = "moaiext-iphone/MOAIGCTurnBasedParticipant.mm"; sourceTree = "<group>"; };
+		11988D6F1690082C006FDB75 /* MOAIGCTurnBasedParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOAIGCTurnBasedParticipant.h; path = "moaiext-iphone/MOAIGCTurnBasedParticipant.h"; sourceTree = "<group>"; };
 		660EBB03160D184A000B1203 /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Crittercism.h; path = "../../3rdparty/crittercismiOS-3.3.3/CrittercismSDK-crashonly/Crittercism.h"; sourceTree = "<group>"; };
 		660EBB06160D1859000B1203 /* CrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CrashReporter.h; path = "../../3rdparty/crittercismiOS-3.3.3/CrittercismSDK-crashonly/CrashReporter.h"; sourceTree = "<group>"; };
 		660EBB07160D1859000B1203 /* CrittercismJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CrittercismJSONKit.h; path = "../../3rdparty/crittercismiOS-3.3.3/CrittercismSDK-crashonly/CrittercismJSONKit.h"; sourceTree = "<group>"; };
@@ -7192,6 +7196,21 @@
 			name = facebook;
 			sourceTree = "<group>";
 		};
+		11988D7216900835006FDB75 /* GC */ = {
+			isa = PBXGroup;
+			children = (
+				E9CA1E54151C7D71005F39B7 /* MOAIGameCenterIOS.h */,
+				E9CA1E55151C7D71005F39B7 /* MOAIGameCenterIOS.mm */,
+				11988D66168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.h */,
+				11988D67168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.mm */,
+				11988D6A168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.h */,
+				11988D6B168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.mm */,
+				11988D6F1690082C006FDB75 /* MOAIGCTurnBasedParticipant.h */,
+				11988D6E1690082C006FDB75 /* MOAIGCTurnBasedParticipant.mm */,
+			);
+			name = GC;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
@@ -8384,6 +8403,7 @@
 		CD524476135982480086DA15 /* moaiext-iphone */ = {
 			isa = PBXGroup;
 			children = (
+				11988D7216900835006FDB75 /* GC */,
 				CDF2C627151B14DD0009D47D /* aku */,
 				CDF2C626151B14C10009D47D /* reachability */,
 				CDF2C625151B14970009D47D /* util */,
@@ -8401,12 +8421,6 @@
 				CDF2C616151B146F0009D47D /* MOAIDialogIOS.mm */,
 				E9A41ADA151ABEDC00650276 /* MOAIFacebookIOS.h */,
 				E9A41ADB151ABEDC00650276 /* MOAIFacebookIOS.mm */,
-				E9CA1E54151C7D71005F39B7 /* MOAIGameCenterIOS.h */,
-				E9CA1E55151C7D71005F39B7 /* MOAIGameCenterIOS.mm */,
-				11988D66168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.h */,
-				11988D67168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.mm */,
-				11988D6A168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.h */,
-				11988D6B168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.mm */,
 				CD91E3FE15252E2F00AE1883 /* MOAIKeyboardIOS.h */,
 				CD91E3FF15252E2F00AE1883 /* MOAIKeyboardIOS.mm */,
 				E9DE457F157EA38800630A7D /* MOAIMoviePlayerIOS.h */,
@@ -11326,6 +11340,7 @@
 				6637040E161280E1002D0D27 /* USHashWriter.h in Headers */,
 				11988D68168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.h in Headers */,
 				11988D6C168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.h in Headers */,
+				11988D711690082C006FDB75 /* MOAIGCTurnBasedParticipant.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13859,6 +13874,7 @@
 				6637040C161280E1002D0D27 /* USHashWriter.cpp in Sources */,
 				11988D69168FDC8C006FDB75 /* MOAIGCTurnBasedIOS.mm in Sources */,
 				11988D6D168FDFCE006FDB75 /* MOAIGCTurnBasedMatch.mm in Sources */,
+				11988D701690082C006FDB75 /* MOAIGCTurnBasedParticipant.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
