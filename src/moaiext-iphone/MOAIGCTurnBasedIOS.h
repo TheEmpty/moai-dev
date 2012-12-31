@@ -20,6 +20,7 @@
 class MOAIGCTurnBasedIOS : public MOAIGlobalClass < MOAIGCTurnBasedIOS, MOAILuaObject > {
 private:
 	static int _startMatchmaker ( lua_State* L );
+	static int _loadMatches ( lua_State* L );
 	static int _setPlayMatchCallback ( lua_State* L );
 	static int _setQuitMatchCallback ( lua_State* L );
 	
@@ -28,6 +29,7 @@ public:
 	
 	MOAILuaRef mPlayMatchCallback;
 	MOAILuaRef mQuitMatchCallback;
+	MOAILuaRef mLoadMatchesCallback;
 	MOAIGCTurnBasedIOSMatchmakerViewDelegate* matchmakerDelegate;
 	
 	MOAIGCTurnBasedIOS ();

@@ -9,6 +9,42 @@
 // lua
 //================================================================//
 
+int MOAIGCTurnBasedMatch::_refreshMatchData ( lua_State* L ) {
+    MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" );
+    
+    // check args
+    int n = lua_gettop(state);
+	if ( n != 2 ) {
+		luaL_error(state, "Got %d arguments expected 2 (self, callback)\n", n);
+		return 0;
+	}
+    
+    self->mGetMatchDataCallback.SetStrongRef ( state, -1 );
+    
+    // request
+    [self->match loadMatchDataWithCompletionHandler: ^(NSData* data, NSError* error) {
+        if ( self->mGetMatchDataCallback != nil ) {
+            MOAILuaStateHandle funcState = self->mGetMatchDataCallback.GetSelf();
+            
+            if ( error == nil and data == nil ) {
+                lua_pushnil ( funcState );
+                lua_pushnil ( funcState );
+            } else if ( error == nil ) {
+                NSString* stringData = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+                lua_pushstring ( funcState, [stringData UTF8String] );
+                lua_pushboolean ( funcState, false );
+            } else {
+                lua_pushnil ( funcState );
+                lua_pushstring ( funcState, [[error localizedDescription] UTF8String] );
+            }
+            
+            funcState.DebugCall ( 2, 0 );
+        }
+    }];
+    
+    return 0;
+}
+
 int MOAIGCTurnBasedMatch::_nextTurn ( lua_State *L ) {
     MOAI_LUA_SETUP ( MOAIGCTurnBasedMatch, "U" );
     // match:nextTurn ( players, match.TURN_TIMEOUT_DEFAULT, matchData, passedTurn )
@@ -53,6 +89,7 @@ int MOAIGCTurnBasedMatch::_nextTurn ( lua_State *L ) {
     
 	// (void)endTurnWithNextParticipants:(NSArray *)nextParticipants turnTimeout:(NSTimeInterval)timeout matchData:(NSData *)matchData completionHandler:(void (^)(NSError *error))completionHandler
     [self->match endTurnWithNextParticipants: array turnTimeout: timeOut matchData: matchData completionHandler: ^( NSError* error ) {
+        // TODO: callback
         printf ( "completion handler...\n" );
     }];
     
@@ -178,6 +215,7 @@ void MOAIGCTurnBasedMatch::RegisterLuaFuncs ( MOAILuaState& state ) {
         { "getCurrentParticipant", _getCurrentParticipant },
         { "getParticipants", _getParticipants },
         { "nextTurn", _nextTurn },
+        { "refreshMatchData", _refreshMatchData },
 		{ NULL, NULL }
 	};
     

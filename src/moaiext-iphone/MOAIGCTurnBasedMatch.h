@@ -20,14 +20,18 @@ private:
 	static const char TURN_TIMEOUT_NONE = -1;
     
 	GKTurnBasedMatch* match;
+	MOAILuaRef mGetMatchDataCallback;
     
 	//----------------------------------------------------------------//
     static int _getStatus ( lua_State* L );
     static int _getMatchID ( lua_State* L );
-    static int _getMatchData ( lua_State* L );
+    // TODO: remove getMatchData ()
+	static int _getMatchData ( lua_State* L );
 	static int _getCurrentParticipant ( lua_State* L );
     static int _getParticipants ( lua_State* L );
 	static int _nextTurn ( lua_State* L );
+	// TODO: rename getMatchData ( func ( data, error ) )
+	static int _refreshMatchData ( lua_State* L );
 	
 public:
 	

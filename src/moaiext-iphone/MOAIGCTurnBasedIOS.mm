@@ -20,6 +20,44 @@ MOAIGCTurnBasedIOS::~MOAIGCTurnBasedIOS () {
     [ matchmakerDelegate dealloc ];
 }
 
+int MOAIGCTurnBasedIOS::_loadMatches ( lua_State* L ) {
+    MOAILuaState state ( L );
+    int args = lua_gettop ( state );
+    
+    if ( args != 1 ) {
+        luaL_error(state, "Got %d arguments expected 1 (callback)\n", args);
+        return 0;
+    }
+    
+    MOAIGCTurnBasedIOS::Get().mLoadMatchesCallback.SetStrongRef ( state, 1 );
+    
+    [GKTurnBasedMatch loadMatchesWithCompletionHandler: ^(NSArray* matches, NSError* error) {
+        MOAILuaStateHandle state = MOAIGCTurnBasedIOS::Get().mLoadMatchesCallback.GetSelf();
+        
+        if ( matches == nil ) {
+            lua_pushnil ( state );
+        } else {
+            lua_newtable ( state );
+            for ( int i = 0; i < (int)[matches count]; i++ ) {
+                lua_pushinteger ( state, i + 1 );
+                MOAIGCTurnBasedMatch* match = new MOAIGCTurnBasedMatch();
+                match->setMatch ( matches[i] );
+                match->PushLuaUserdata ( state );
+                lua_settable ( state, -3 );
+            }
+        }
+        
+        if ( error == nil ) {
+            lua_pushnil ( state );
+        } else {
+            lua_pushstring ( state, [[error localizedDescription] UTF8String] );
+        }
+        
+        state.DebugCall ( 2, 0 );
+    }];
+    return 0;
+}
+
 int MOAIGCTurnBasedIOS::_setPlayMatchCallback( lua_State* L ) {
     MOAILuaState state ( L );
     MOAIGCTurnBasedIOS::Get ().mPlayMatchCallback.SetStrongRef ( state, 1 );
@@ -57,6 +95,7 @@ void MOAIGCTurnBasedIOS::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	luaL_Reg regTable [] = {
         { "startMatchmaker", _startMatchmaker },
+        { "loadMatches", _loadMatches },
         { "setPlayMatchCallback", _setPlayMatchCallback },
         { "setQuitMatchCallback", _setQuitMatchCallback },
 		{ NULL, NULL }
