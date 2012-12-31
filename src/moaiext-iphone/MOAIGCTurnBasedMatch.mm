@@ -34,7 +34,6 @@ int MOAIGCTurnBasedMatch::_nextTurn ( lua_State *L ) {
     }
     
     NSArray* array = [NSArray arrayWithObjects: participants count:length]; // build nsarray from array
-    // delete participants; // free array
     
     // create / load the timeOut (NSTimeInterval)
     int daysOrFlag = lua_tonumber ( state, 3 );
@@ -51,16 +50,11 @@ int MOAIGCTurnBasedMatch::_nextTurn ( lua_State *L ) {
     // convert matchData to NSData
     NSString* matchDataString = [NSString stringWithUTF8String: lua_tostring ( state, 4 )];
     NSData* matchData = [matchDataString dataUsingEncoding: NSUTF8StringEncoding];
-    [matchDataString release];
     
 	// (void)endTurnWithNextParticipants:(NSArray *)nextParticipants turnTimeout:(NSTimeInterval)timeout matchData:(NSData *)matchData completionHandler:(void (^)(NSError *error))completionHandler
     [self->match endTurnWithNextParticipants: array turnTimeout: timeOut matchData: matchData completionHandler: ^( NSError* error ) {
         printf ( "completion handler...\n" );
     }];
-
-    // endTurnWithNextParticipants: turnTimeout: matchData: completionHandler:
-    // [array release];
-    // [matchData release];
     
     return 0;
 }
